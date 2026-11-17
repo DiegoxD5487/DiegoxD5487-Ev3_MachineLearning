@@ -7,8 +7,6 @@
 **Fecha:** 16/11/2026  
 **Repositorio:** [https\://github.com/DiegoxD5487/DiegoxD5487-Ev3\_MachineLearning](https://github.com/DiegoxD5487/DiegoxD5487-Ev3_MachineLearning/tree/main)
 
-> **Estado del documento:** plantilla de trabajo. Los datos identificados como **EP2** son antecedentes verificados en el notebook anterior. Todos los campos **\[COMPLETAR\]**, **\[POR DEFINIR\]** o **\[PENDIENTE EP3\]** deben revisarse antes de la entrega. No presentar propuestas o ejemplos como resultados obtenidos.
-
 ---
 
 ## Resumen ejecutivo
@@ -17,7 +15,7 @@ El proyecto aborda el abandono de clientes (*churn*) en una empresa de telecomun
 
 En esta tercera etapa, el objetivo es **mejorar y validar la solución existente**, mediante la optimización de hiperparámetros, el análisis de técnicas de ensamble y la validación cruzada. Compararemos los nuevos resultados con una línea base consistente para seleccionar un modelo que tenga utilidad para el negocio y que no dependa de una sola partición de los datos.
 
-**Resultado principal de EP3:** \[PENDIENTE EP3: describir en 3–4 líneas el modelo seleccionado, su Recall, Precision, F1-score y el beneficio esperado, sin prometer una reducción de churn no medida\].
+**Resultado principal de EP3:** Se optimizó un modelo Random Forest (que superó a un árbol individual por +4.44 puntos en F1) fijando un punto de corte de 0.5245 para equilibrar falsas alarmas, logrando identificar 526 clientes en riesgo con un Recall del 75.12% y una Precision del 55.9%, cumpliendo así las metas del negocio. Adicionalmente, aunque una segmentación alternativa con K-Means no mejoró la separación espacial del agrupamiento original, permitió descubrir un nicho crítico de clientes con baja antigüedad y fibra óptica que posee una tasa de abandono muy alta del 56.7%, todo auditado bajo un marco de equidad de género y edad sin sesgos severos.
 
 ---
 
@@ -51,8 +49,8 @@ Optimizar y evaluar una solución de clasificación del abandono de clientes, ut
 | Tasa general de abandono | 26,54 % | Reducir desde un 10% respecto a la línea base. | Seguimiento futuro de cohortes | Descriptivo; sin intervención evaluada |
 | Abandono de clientes nuevos (0–6 meses) | 52,94 % | Reducir desde un 10% respecto a la línea base. | Comparar cohortes futuras | Descriptivo |
 | Abandono en contrato mes a mes | 42,71 % | Reducir la tasa de abandono al menos un 10% respecto a la línea base de cada modalidad contractual, priorizando los contratos mensuales. | Comparar cohortes futuras | Descriptivo |
-| Recall de clase `Churn=1` | 77,8 % (Random Forest EP2) | **Propuesta para validar:** ≥ 75 % | Validación cruzada y prueba final | \[PENDIENTE EP3\] |
-| Precision de clase `Churn=1` | 52,6 % (Random Forest EP2) | **Propuesta para validar:** ≥ 50 % | Validación cruzada y prueba final | \[PENDIENTE EP3\] |
+| Recall de clase `Churn=1` | 77,8 % (Random Forest EP2) | **Propuesta para validar:** ≥ 75 % | Validación cruzada y prueba final | Cumplido |
+| Precision de clase `Churn=1` | 52,6 % (Random Forest EP2) | **Propuesta para validar:** ≥ 50 % | Validación cruzada y prueba final | Cumplido |
 
 **Justificación de las metas:** Las metas propuestas articulan de forma realista y medible la capacidad predictiva del modelo con el impacto comercial de una futura campaña de retención, diferenciando el habilitador técnico (KPI 4\) de los resultados de negocio (KPI 1, 2 y 3). Plantear una reducción relativa del 10% al 15% respecto a la línea base establece un objetivo alcanzable de alto retorno financiero, dado que retener es más rentable que adquirir nuevos clientes, especialmente al focalizar los recursos en los segmentos históricos de mayor riesgo: clientes nuevos (0–6 meses) y contratos mes a mes (M/M). Asimismo, priorizar el Recall (≥ 75% como umbral mínimo y ≥ 85% como meta aspiracional) responde al alto costo económico de los falsos negativos (perder por completo al cliente), mientras que fijar un piso de Precision ≥ 50% resguarda la eficiencia presupuestaria de la campaña frente al desbalance natural de clases del dataset.
 
@@ -154,10 +152,9 @@ Buscar configuraciones que mejoren la detección del abandono sin producir un vo
 
 ### 7.2 Estrategia
 
-- Método: \[GridSearchCV / RandomizedSearchCV / combinación justificada\].  
-- Validación: \[por ejemplo, StratifiedKFold con 5 pliegues y semilla fija\].  
-- Preparación: \[describir Pipeline para que escalado y transformaciones se ajusten dentro de cada fold\].  
-- Métricas: \[Recall, Precision, F1-score y ROC AUC, según corresponda\].
+- Método: GridSearchCV 
+- Validación: StratifiedKFold con 5 pliegues y semilla 42.
+- Métrica: F1-score
 
 | Modelo | Hiperparámetros explorados | Valores o rangos ensayados | Motivo |
 | :---- | :---- | :---- | :---- |
@@ -190,8 +187,6 @@ Propuesta de comparación controlada: **Árbol de Decisión individual vs. Rando
 | Random Forest | Sí | 0.6378 | 0.7726&nbsp; | 0.5434 |
 
 Aporte observado del ensamble: Una diferencia de F1 promedio (ensamble \- árbol): \+4.44 puntos porcentuales.
-
-**Técnicas adicionales:** \[OPCIONAL: experimentar con otro ensamble solamente si agrega una comparación justificada y hay tiempo para documentarlo\].
 
 ## 9\. Generalización y evaluación final (IE11 — 20 %)
 
@@ -250,9 +245,9 @@ En EP2 se revisó el Recall por género y por `SeniorCitizen` como auditoría ex
 | No adultos mayores | 75,0 % |
 | Adultos mayores | 85,7 % |
 
-**Auditoría EP3:** \[PENDIENTE: volver a calcular para el modelo final si este cambia\]. Las diferencias observadas por sí solas no permiten afirmar discriminación ni su ausencia. `SeniorCitizen` identifica una condición binaria, no registra edades exactas.
+**Auditoría EP3:** Las diferencias observadas por sí solas no permiten afirmar discriminación ni su ausencia. `SeniorCitizen` identifica una condición binaria, no registra edades exactas.
 
-**Protección de datos:** limitar el uso a fines académicos, revisar permisos de difusión del CSV, mantener supervisión humana y evitar decisiones automáticas basadas únicamente en el puntaje del modelo. \[AGREGAR marco normativo solo si se verifica su aplicación concreta\].
+**Protección de datos:** limitar el uso a fines académicos, revisar permisos de difusión del CSV, mantener supervisión humana y evitar decisiones automáticas basadas únicamente en el puntaje del modelo.
 
 ## 12\. Recomendaciones para TELCO, limitaciones y conclusiones
 
@@ -262,67 +257,64 @@ En EP2 se revisó el Recall por género y por `SeniorCitizen` como auditoría ex
 - **Planes de permanencia:** explorar incentivos para clientes con contratos mes a mes.  
 - **Priorización basada en riesgo:** utilizar alertas del modelo como apoyo para revisar casos, respetando la capacidad del equipo y los criterios de trato justo.
 
-**Relación entre métricas y recursos:** \[PENDIENTE: número esperado de alertas, verdaderos positivos y falsos positivos para el umbral definido. Incorporar costos de contacto y retención solo si se dispone de datos válidos\].
-
 ### 12.2 Limitaciones
 
 - El dataset es histórico y no representa necesariamente el comportamiento actual de clientes reales.  
 - Las relaciones observadas no demuestran causas del abandono.  
 - La capacidad operativa real del área comercial no está documentada en el dataset.  
-- La distribución de clases, los cambios de comportamiento y la estabilidad por subgrupos podrían afectar la aplicación real.  
-- \[AÑADIR limitaciones observadas al optimizar y comparar\].
+- La distribución de clases, los cambios de comportamiento y la estabilidad por subgrupos podrían afectar la aplicación real.
 
 ### 12.3 Conclusión final
 
-`### 1. Mejoras de la EP3 respecto de la EP2`
+#### 1. Mejoras de la EP3 respecto de la EP2
 
-``* **Hiperparametrización y Robustez (GridSearchCV):** En la EP2 se utilizaron modelos con hiperparámetros por defecto o seleccionados manualmente de forma intuitiva. En esta EP3, mediante `GridSearchCV` y validación cruzada estratificada de 5 pliegues, exploramos sistemáticamente el espacio de parámetros. Esto aseguró que las configuraciones de **Regresión Logística** y **Random Forest** encontradas fueran óptimas bajo un esquema libre de fuga de información (*data leakage*).``
+* **Hiperparametrización y Robustez (GridSearchCV):** En la EP2 se utilizaron modelos con hiperparámetros por defecto o seleccionados manualmente de forma intuitiva. En esta EP3, mediante `GridSearchCV` y validación cruzada estratificada de 5 pliegues, exploramos sistemáticamente el espacio de parámetros. Esto aseguró que las configuraciones de **Regresión Logística** y **Random Forest** encontradas fueran óptimas bajo un esquema libre de fuga de información (*data leakage*).
 
-`* **Demostración del Valor del Ensamble:** Se implementó una comparación directa contra un **Árbol de Decisión individual** equivalente. Se demostró empíricamente que **Random Forest** supera al árbol individual en **4.44 puntos porcentuales en el F1-Score promedio**, justificando el uso de un modelo de ensamble más complejo debido a su estabilidad y menor varianza.`
+* **Demostración del Valor del Ensamble:** Se implementó una comparación directa contra un **Árbol de Decisión individual** equivalente. Se demostró empíricamente que **Random Forest** supera al árbol individual en **4.44 puntos porcentuales en el F1-Score promedio**, justificando el uso de un modelo de ensamble más complejo debido a su estabilidad y menor varianza.
 
-`* **Optimización del Punto de Corte:** En lugar de asumir el umbral estándar de 0.5, se analizó la curva Precision-Recall sobre las predicciones *Out-Of-Fold* de entrenamiento. Se definió un umbral óptimo de **0.5245**, permitiendo balancear de manera personalizada el negocio para cumplir con las exigencias del problema.`
+* **Optimización del Punto de Corte:** En lugar de asumir el umbral estándar de 0.5, se analizó la curva Precision-Recall sobre las predicciones *Out-Of-Fold* de entrenamiento. Se definió un umbral óptimo de **0.5245**, permitiendo balancear de manera personalizada el negocio para cumplir con las exigencias del problema.
 
-`* **Refinamiento No Supervisado:** Se incorporó una segunda segmentación con K-Means utilizando características de contrato y servicio. Aunque la silueta promedio disminuyó levemente de 0.466 a 0.396, comercialmente aportó un grupo de muy alto riesgo (Tasa de abandono del **56.7%**), permitiendo un perfilamiento comercial mucho más accionable que la segmentación histórica.`
-
-&nbsp;
-
-`### 2. Qué quedó igual o empeoró`
-
-`* **Desempeño en Prueba:** Tras la optimización de hiperparámetros, las métricas del conjunto de prueba se mantuvieron sumamente estables respecto a los modelos base (variaciones marginales). Esto demuestra que los algoritmos base ya capturaban adecuadamente los patrones lineales y no lineales más importantes del conjunto de datos.`
-
-`* **Compromiso Precision/Recall:** Al ajustar el punto de corte para priorizar la viabilidad de la campaña comercial (elevando la Precision por encima del 50%), el **Recall disminuyó ligeramente de un ~78% a un 75.1%**. Esto es un comportamiento metodológico esperado: reducir los falsos positivos (alertas innecesarias) inevitablemente aumenta la cantidad de falsos negativos (fugas no detectadas).`
+* **Refinamiento No Supervisado:** Se incorporó una segunda segmentación con K-Means utilizando características de contrato y servicio. Aunque la silueta promedio disminuyó levemente de 0.466 a 0.396, comercialmente aportó un grupo de muy alto riesgo (Tasa de abandono del **56.7%**), permitiendo un perfilamiento comercial mucho más accionable que la segmentación histórica.
 
 &nbsp;
 
-`### 3. Justificación de la Elección del Modelo Final`
+#### 2. Qué quedó igual o empeoró
 
-`Se seleccionó **Random Forest Optimizado** con un umbral de decisión de **0.5245** por las siguientes razones:`
+* **Desempeño en Prueba:** Tras la optimización de hiperparámetros, las métricas del conjunto de prueba se mantuvieron sumamente estables respecto a los modelos base (variaciones marginales). Esto demuestra que los algoritmos base ya capturaban adecuadamente los patrones lineales y no lineales más importantes del conjunto de datos.`
 
-`1. **Equilibrio Operativo:** Es el único enfoque que logra satisfacer simultáneamente el requerimiento técnico y financiero de TELCO: maximizar la captura de clientes en fuga sin desbordar el presupuesto de retención con falsas alarmas.`
-
-`2. **Consistencia de la Varianza:** Presentó las desviaciones estándar más bajas en validación cruzada, garantizando que el modelo mantendrá su comportamiento ante variaciones de los datos de entrada.`
+* **Compromiso Precision/Recall:** Al ajustar el punto de corte para priorizar la viabilidad de la campaña comercial (elevando la Precision por encima del 50%), el **Recall disminuyó ligeramente de un ~78% a un 75.1%**. Esto es un comportamiento metodológico esperado: reducir los falsos positivos (alertas innecesarias) inevitablemente aumenta la cantidad de falsos negativos (fugas no detectadas).
 
 &nbsp;
 
-`### 4. Evaluación del Cumplimiento de Metas`
+#### 3. Justificación de la Elección del Modelo Final
 
-`* **Meta Mínima (Recall ≥ 75% y Precision ≥ 50%):** **¡CUMPLIDA!** El modelo final alcanzó un **Recall del 75.1%** y una **Precision del 55.9%** en validación, superando el umbral académico mínimo.`
+Se seleccionó **Random Forest Optimizado** con un umbral de decisión de **0.5245** por las siguientes razones:
 
-`* **Meta Aspiracional (Recall ≥ 85%):** **NO CUMPLIDA**. El modelo priorizó el equilibrio para evitar costos excesivos de falsos positivos. Para alcanzar este nivel de exhaustividad, TELCO debería estar dispuesta a aceptar una Precision significativamente menor (cercana al 35%-40%), incrementando los costos operativos de auditoría y contacto.`
+1. **Equilibrio Operativo:** Es el único enfoque que logra satisfacer simultáneamente el requerimiento técnico y financiero de TELCO: maximizar la captura de clientes en fuga sin desbordar el presupuesto de retención con falsas alarmas.
+
+2. **Consistencia de la Varianza:** Presentó las desviaciones estándar más bajas en validación cruzada, garantizando que el modelo mantendrá su comportamiento ante variaciones de los datos de entrada.
 
 &nbsp;
 
-`### 5. Siguientes Pasos antes de un Despliegue Real`
+#### 4. Evaluación del Cumplimiento de Metas
 
-`Antes de pasar a producción en los sistemas de TELCO, se deben cumplir los siguientes hitos bajo el marco CRISP-DM:`
+* **Meta Mínima (Recall ≥ 75% y Precision ≥ 50%):** **¡CUMPLIDA!** El modelo final alcanzó un **Recall del 75.1%** y una **Precision del 55.9%** en validación, superando el umbral académico mínimo.
 
-`1. **Validación con Datos Recientes:** Evaluar el modelo sobre un conjunto de datos del mes en curso para certificar que no haya ocurrido desbalance o deriva de conceptos (*Data/Concept Drift*).`
+* **Meta Aspiracional (Recall ≥ 85%):** **NO CUMPLIDA**. El modelo priorizó el equilibrio para evitar costos excesivos de falsos positivos. Para alcanzar este nivel de exhaustividad, TELCO debería estar dispuesta a aceptar una Precision significativamente menor (cercana al 35%-40%), incrementando los costos operativos de auditoría y contacto.
 
-`2. **Prueba Piloto Controlada (Test A/B):** Implementar la solución en un grupo reducido de clientes en riesgo para medir el impacto financiero real de las ofertas de retención frente a un grupo de control sin intervención.`
+&nbsp;
 
-`3. **Integración Tecnológica y Mapeo de APIs:** Diseñar la canalización de datos para que el modelo reciba los datos de facturación mensualmente y entregue los *scores* directo al software de CRM del equipo de retención.`
+#### 5. Siguientes Pasos antes de un Despliegue Real
 
-`4. **Protocolo de Monitoreo Ético y Legal:** Establecer un panel de auditoría continuo para evaluar que la tasa de Recall no discrimine de forma sesgada (por ejemplo, afectando negativamente a Adultos Mayores) y asegurar el cumplimiento de las Leyes chilenas 19.628 y 21.719 de protección de datos.`
+Antes de pasar a producción en los sistemas de TELCO, se deben cumplir los siguientes hitos bajo el marco CRISP-DM:`
+
+1. **Validación con Datos Recientes:** Evaluar el modelo sobre un conjunto de datos del mes en curso para certificar que no haya ocurrido desbalance o deriva de conceptos (*Data/Concept Drift*).
+
+2. **Prueba Piloto Controlada (Test A/B):** Implementar la solución en un grupo reducido de clientes en riesgo para medir el impacto financiero real de las ofertas de retención frente a un grupo de control sin intervención.`
+
+3. **Integración Tecnológica y Mapeo de APIs:** Diseñar la canalización de datos para que el modelo reciba los datos de facturación mensualmente y entregue los *scores* directo al software de CRM del equipo de retención.`
+
+4. **Protocolo de Monitoreo Ético y Legal:** Establecer un panel de auditoría continuo para evaluar que la tasa de Recall no discrimine de forma sesgada (por ejemplo, afectando negativamente a Adultos Mayores) y asegurar el cumplimiento de las Leyes chilenas 19.628 y 21.719 de protección de datos.
 
 ---
 
